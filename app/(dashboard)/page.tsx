@@ -1,5 +1,5 @@
-import { UserButton } from "@clerk/nextjs";
+"use client";
 
 export default function Home() {
-  return <UserButton afterSwitchSessionUrl="/" />;
+  return <div>Home Page</div>;
 }
