@@ -15,6 +15,13 @@
       "when": 1758392658389,
       "tag": "0001_greedy_dorian_gray",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758787736654,
+      "tag": "0002_perfect_bucky",
+      "breakpoints": true
     }
   ]
 }
