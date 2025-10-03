@@ -129,6 +129,7 @@ const app = new Hono()
         .values({
           id: createId(),
           ...values,
+          categoryId: values.categoryId || null,
         })
         .returning();
 
