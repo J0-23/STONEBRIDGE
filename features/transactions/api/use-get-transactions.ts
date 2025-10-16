@@ -8,7 +8,7 @@ export const useGetTransactions = () => {
   const params = useSearchParams();
   const from = params.get("from") || "";
   const to = params.get("to") || "";
-  const accountId = params.get("accoutId") || "";
+  const accountId = params.get("accountId") || "";
 
   const query = useQuery({
     // TODO: Check if params are needed in the key
