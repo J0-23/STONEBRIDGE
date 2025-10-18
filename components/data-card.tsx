@@ -12,19 +12,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const boxVariant = cva("rounded-md p-3", {
-  variants: {
-    variant: {
-      default: "bg-blue-500/20",
-      success: "bg-emerald-500/20",
-      danger: "bg-rose-500/20",
-      warning: "bg-yellow-500/20",
+const boxVariant = cva(
+  "rounded-xl p-3 flex items-center justify-center shadow-sm",
+  {
+    variants: {
+      variant: {
+        default: "bg-blue-500/20",
+        success: "bg-emerald-500/20",
+        danger: "bg-rose-500/20",
+        warning: "bg-yellow-500/20",
+      },
     },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
-});
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
 const iconVariant = cva("size-6", {
   variants: {
@@ -60,10 +63,12 @@ export const DataCard = ({
   percentageChange = 0,
 }: DataCardProps) => {
   return (
-    <Card className="border-none drop-shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between gap-x-4">
-        <div className="space-y-2">
-          <CardTitle className="text-2xl line-clamp-1">{title}</CardTitle>
+    <Card className="border border-slate-200 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-200">
+      <CardHeader className="flex flex-row items-center justify-between gap-x-4 pb-2">
+        <div className="space-y-1">
+          <CardTitle className="text-[17px] font-semibold text-slate-800">
+            {title}
+          </CardTitle>
           <CardDescription className="line-clamp-1">
             {dateRange}
           </CardDescription>
@@ -72,8 +77,8 @@ export const DataCard = ({
           <Icon className={cn(iconVariant({ variant }))} />
         </div>
       </CardHeader>
-      <CardContent>
-        <h1 className="font-bold text-2xl mb-2 line-clamp-1 break-all">
+      <CardContent className="pt-0">
+        <h1 className="font-bold text-3xl mb-1 line-clamp-1 break-all">
           <CountUp
             preserveValue
             start={0}
@@ -85,9 +90,15 @@ export const DataCard = ({
         </h1>
         <p
           className={cn(
-            "text-muted-foreground text-sm line-clamp-1",
-            percentageChange > 0 && "text-emerald-500",
-            percentageChange < 0 && "text-rose-500"
+            "text-sm line-clamp-1",
+            // Make Expenses negative values always rose
+            title.toLowerCase() === "expenses" && value < 0
+              ? "text-rose-500"
+              : percentageChange > 0
+              ? "text-emerald-500"
+              : percentageChange < 0
+              ? "text-rose-500"
+              : "text-muted-foreground"
           )}
         >
           {formatPercentage(percentageChange, { addPrefix: true })} from last

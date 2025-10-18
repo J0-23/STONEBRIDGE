@@ -110,20 +110,21 @@ const TransactionsPage = () => {
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
         <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
-          <CardTitle className="text-xl line-clamp-1">
+          <CardTitle className="text-2xl font-semibold text-slate-900 line-clamp-1">
             Transaction History
           </CardTitle>
           <div className="flex flex-col lg:flex-row gap-y-2 items-center gap-x-2">
             <Button
               onClick={newTransaction.onOpen}
               size="sm"
-              className="w-full lg:w-auto"
+              className="w-full lg:w-auto rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
             >
-              <Plus className="size-4 mr-2" /> Add new
+              <Plus className="size-4" /> Add new
             </Button>
             <UploadButton onUpload={onUpload} />
           </div>
         </CardHeader>
+
         <CardContent>
           <DataTable
             filterKey="payee"

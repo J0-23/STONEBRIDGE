@@ -32,14 +32,19 @@ export const Select = ({
   return (
     <CreateableSelect
       placeholder={placeholder}
-      className="text.sm h-10"
+      className="text-sm h-10"
       styles={{
         control: (base) => ({
           ...base,
           borderColor: "#e2e8f0",
+          cursor: disabled ? "not-allowed" : "pointer",
           ":hover": {
             borderColor: "#e2e8f0",
           },
+        }),
+        option: (base, state) => ({
+          ...base,
+          cursor: state.isDisabled ? "not-allowed" : "pointer",
         }),
       }}
       value={formattedValue}

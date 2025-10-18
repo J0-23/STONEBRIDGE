@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format, subDays } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { ChevronDown } from "lucide-react";
 import qs from "query-string";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { useGetSummary } from "@/features/summary/api/use-get-summary";
-
-import { cn, formatDateRange } from "@/lib/utils";
+import { formatDateRange } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -22,8 +20,8 @@ import {
 export const DateFilter = () => {
   const router = useRouter();
   const pathname = usePathname();
-
   const params = useSearchParams();
+
   const accountId = params.get("accountId");
   const from = params.get("from") || "";
   const to = params.get("to") || "";
@@ -37,6 +35,15 @@ export const DateFilter = () => {
   };
 
   const [date, setDate] = useState<DateRange | undefined>(paramState);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // detect small screens
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    handler();
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
 
   const pushToUrl = (dateRange: DateRange | undefined) => {
     const query = {
@@ -44,15 +51,10 @@ export const DateFilter = () => {
       to: format(dateRange?.to || defaultTo, "yyyy-MM-dd"),
       accountId,
     };
-
     const url = qs.stringifyUrl(
-      {
-        url: pathname,
-        query,
-      },
+      { url: pathname, query },
       { skipEmptyString: true, skipNull: true }
     );
-
     router.push(url);
   };
 
@@ -65,16 +67,19 @@ export const DateFilter = () => {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          disabled={false}
           size="sm"
           variant="outline"
-          className="lg:w-auto w-full h-9 rounded-md px-3 font-normal bg-white/10  hover:bg-white/20 hover:text-white border-none focus:ring-offset-0 focus:ring-transparent outline-none text-white focus:bg-white/30 transition [&_*]:text-white"
+          className="lg:w-auto w-full h-9 rounded-md px-3 font-normal bg-white/10 hover:bg-white/20 hover:text-white border-none focus:ring-offset-0 focus:ring-transparent outline-none text-white focus:bg-white/30 transition [&_*]:text-white cursor-pointer"
         >
-          <span> {formatDateRange(paramState)} </span>
+          <span>{formatDateRange(paramState)}</span>
           <ChevronDown className="ml-2 size-4 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="lg:w-auto w-full p-0" align="start">
+
+      <PopoverContent
+        className="lg:w-auto w-full p-0 max-w-[90vw]"
+        align="start"
+      >
         <Calendar
           disabled={false}
           autoFocus
@@ -82,9 +87,9 @@ export const DateFilter = () => {
           defaultMonth={date?.from}
           selected={date}
           onSelect={setDate}
-          numberOfMonths={2}
+          numberOfMonths={isMobile ? 1 : 2} // <- responsive
         />
-        <div className="p-4 flex justify-end gap-2">
+        <div className="p-4 flex flex-col md:flex-row justify-end gap-2">
           <PopoverClose asChild>
             <Button
               onClick={onReset}

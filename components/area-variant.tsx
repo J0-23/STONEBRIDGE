@@ -7,46 +7,29 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-
 import { CustomTooltip } from "@/components/custom-tooltip";
 
 type Props = {
-  data: {
-    date: string;
-    income: number;
-    expenses: number;
-  }[];
+  data: { date: string; [key: string]: number | string }[];
+  dataKeys: string[];
+  colors?: string[];
 };
 
-export const AreaVariant = ({ data }: Props) => {
-  // Convert date strings to timestamps for time scale
-  const chartData = data.map((d) => {
-    const parsedDate = new Date(d.date).getTime();
+export const AreaVariant = ({ data, dataKeys, colors }: Props) => {
+  const defaultColors = ["#3d82f6", "#f43f5e", "#10b981", "#f59e0b"];
 
-    return {
-      ...d,
-      date: parsedDate,
-    };
-  });
-
-  if (!chartData || chartData.length === 0) {
-    return <div>No data to display</div>;
-  }
+  // Convert dates and split balance
+  const chartData = data.map((d) => ({
+    ...d,
+    date: new Date(d.date).getTime(),
+    positiveBalance: Number(d.balance ?? 0) > 0 ? Number(d.balance) : 0,
+    negativeBalance: Number(d.balance ?? 0) < 0 ? Number(d.balance) : 0,
+  }));
 
   return (
     <ResponsiveContainer width="100%" height={350}>
       <AreaChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
-        <defs>
-          <linearGradient id="income" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="2%" stopColor="#3d82f6" stopOpacity={0.8} />
-            <stop offset="98%" stopColor="#3d82f6" stopOpacity={0} />
-          </linearGradient>
-          <linearGradient id="expenses" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="2%" stopColor="#f43f5e" stopOpacity={0.8} />
-            <stop offset="98%" stopColor="#f43f5e" stopOpacity={0} />
-          </linearGradient>
-        </defs>
 
         <XAxis
           type="number"
@@ -62,20 +45,50 @@ export const AreaVariant = ({ data }: Props) => {
 
         <Tooltip content={<CustomTooltip />} />
 
-        <Area
-          type="monotone"
-          dataKey="income"
-          stroke="#3d82f6"
-          fill="url(#income)"
-          strokeWidth={2}
-        />
-        <Area
-          type="monotone"
-          dataKey="expenses"
-          stroke="#f43f5e"
-          fill="url(#expenses)"
-          strokeWidth={2}
-        />
+        {dataKeys.map((key, index) => {
+          if (key === "balance") {
+            // Positive area
+            return [
+              <Area
+                key="positiveBalance"
+                type="basis"
+                dataKey="positiveBalance"
+                stroke="#3d82f6"
+                fill="#10b981"
+                fillOpacity={0.5}
+                strokeWidth={2}
+              />,
+              // Negative area
+              <Area
+                key="negativeBalance"
+                type="basis"
+                dataKey="negativeBalance"
+                stroke="#3d82f6"
+                fill="#f43f5e"
+                fillOpacity={0.5}
+                strokeWidth={2}
+              />,
+            ];
+          }
+
+          // Other data keys (income, expenses, etc.)
+          const fill =
+            colors?.[index] || defaultColors[index % defaultColors.length];
+          const stroke =
+            colors?.[index] || defaultColors[index % defaultColors.length];
+
+          return (
+            <Area
+              key={key}
+              type="monotone"
+              dataKey={key}
+              stroke={stroke}
+              fill={fill}
+              fillOpacity={0.5}
+              strokeWidth={2}
+            />
+          );
+        })}
       </AreaChart>
     </ResponsiveContainer>
   );

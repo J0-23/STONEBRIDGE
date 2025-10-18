@@ -122,6 +122,9 @@ export const TransactionForm = ({
                   disabled={disabled}
                 />
               </FormControl>
+              <p className="text-sm text-muted-foreground mt-1">
+                If it doesn’t exist, name it and press Enter
+              </p>
             </FormItem>
           )}
         />
@@ -142,6 +145,9 @@ export const TransactionForm = ({
                   disabled={disabled}
                 />
               </FormControl>
+              <p className="text-sm text-muted-foreground mt-1">
+                If it doesn’t exist, name it and press Enter
+              </p>
             </FormItem>
           )}
         />

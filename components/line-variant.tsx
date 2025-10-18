@@ -11,14 +11,14 @@ import {
 import { CustomTooltip } from "@/components/custom-tooltip";
 
 type Props = {
-  data: {
-    date: string;
-    income: number;
-    expenses: number;
-  }[];
+  data: { date: string; [key: string]: number | string }[];
+  dataKeys: string[]; // fields to display as lines, e.g., ["income", "expenses"] or ["balance"]
+  colors?: string[]; // optional colors for each line
 };
 
-export const LineVariant = ({ data }: Props) => {
+export const LineVariant = ({ data, dataKeys, colors }: Props) => {
+  const defaultColors = ["#3b82f6", "#f43f5e", "#10b981", "#f59e0b"];
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <LineChart data={data}>
@@ -32,20 +32,18 @@ export const LineVariant = ({ data }: Props) => {
           tickMargin={16}
         />
         <Tooltip content={<CustomTooltip />} />
-        <Line
-          dot={false}
-          dataKey="income"
-          stroke="#3b82f6"
-          strokeWidth={2}
-          className="drop-shadow-sm"
-        />
-        <Line
-          dot={false}
-          dataKey="expenses"
-          stroke="#f43f5e"
-          strokeWidth={2}
-          className="drop-shadow-sm"
-        />
+        {dataKeys.map((key, index) => (
+          <Line
+            key={key}
+            dot={false}
+            dataKey={key}
+            stroke={
+              colors?.[index] || defaultColors[index % defaultColors.length]
+            }
+            strokeWidth={2}
+            className="drop-shadow-sm"
+          />
+        ))}
       </LineChart>
     </ResponsiveContainer>
   );

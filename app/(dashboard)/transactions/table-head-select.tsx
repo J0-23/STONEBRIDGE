@@ -30,14 +30,20 @@ export const TableHeadSelect = ({
     >
       <SelectTrigger
         className={cn(
-          "focus:ring-offset-0 focus:ring-transparent outline-none border-none bg-transparent capitalize",
-          currentSelection && "text-blue-500"
+          "focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 outline-none border border-gray-200 rounded-md bg-white px-2 py-1 text-sm capitalize transition-colors",
+          currentSelection ? "text-blue-500" : "text-gray-400",
+          "hover:bg-blue-50"
         )}
       >
         <SelectValue placeholder="Skip" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="skip">Skip</SelectItem>
+      <SelectContent className="bg-white shadow-md rounded-md p-1">
+        <SelectItem
+          value="skip"
+          className="capitalize text-gray-500 hover:bg-blue-50"
+        >
+          Skip
+        </SelectItem>
         {options.map((option, index) => {
           const disabled =
             Object.values(selectedColumns).includes(option) &&
@@ -47,7 +53,12 @@ export const TableHeadSelect = ({
               key={index}
               value={option}
               disabled={disabled}
-              className="capitalize"
+              className={cn(
+                "capitalize",
+                disabled
+                  ? "text-gray-300 cursor-not-allowed"
+                  : "hover:bg-blue-50"
+              )}
             >
               {option}
             </SelectItem>

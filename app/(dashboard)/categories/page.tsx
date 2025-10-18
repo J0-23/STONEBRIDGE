@@ -41,10 +41,14 @@ const CategoriesPage = () => {
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
         <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
-          <CardTitle className="text-xl line-clamp-1">
+          <CardTitle className="text-2xl font-semibold text-slate-900 line-clamp-1">
             Categories Page
           </CardTitle>
-          <Button onClick={newCategory.onOpen} size="sm">
+          <Button
+            onClick={newCategory.onOpen}
+            size="sm"
+            className="w-full lg:w-auto rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+          >
             <Plus className="size-4 mr-2" /> Add new
           </Button>
         </CardHeader>

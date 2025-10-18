@@ -20,10 +20,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-const formSchema = insertTransactionSchema.omit({
-  id: true,
-});
-
+const formSchema = insertTransactionSchema.omit({ id: true });
 type FormValues = z.input<typeof formSchema>;
 
 export const NewTransactionSheet = () => {
@@ -33,39 +30,28 @@ export const NewTransactionSheet = () => {
 
   const categoryQuery = useGetCategories();
   const categoryMutation = useCreateCategory();
-  const onCreateCategory = (name: string) =>
-    categoryMutation.mutate({
-      name,
-    });
-  const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
-    label: category.name,
-    value: category.id,
+  const onCreateCategory = (name: string) => categoryMutation.mutate({ name });
+  const categoryOptions = (categoryQuery.data ?? []).map((c) => ({
+    label: c.name,
+    value: c.id,
   }));
 
   const accountQuery = useGetAccounts();
   const accountMutation = useCreateAccount();
-  const onCreateAccount = (name: string) =>
-    accountMutation.mutate({
-      name,
-    });
-  const accountOptions = (accountQuery.data ?? []).map((account) => ({
-    label: account.name,
-    value: account.id,
+  const onCreateAccount = (name: string) => accountMutation.mutate({ name });
+  const accountOptions = (accountQuery.data ?? []).map((a) => ({
+    label: a.name,
+    value: a.id,
   }));
 
   const isPending =
     createMutation.isPending ||
     categoryMutation.isPending ||
     accountMutation.isPending;
-
   const isLoading = categoryQuery.isLoading || accountQuery.isLoading;
 
   const onSubmit = (values: FormValues) => {
-    createMutation.mutate(values, {
-      onSuccess: () => {
-        onClose();
-      },
-    });
+    createMutation.mutate(values, { onSuccess: onClose });
   };
 
   return (
@@ -75,9 +61,9 @@ export const NewTransactionSheet = () => {
           <SheetTitle>New Transaction</SheetTitle>
           <SheetDescription>Add a new transaction.</SheetDescription>
         </SheetHeader>
+
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            {" "}
             <Loader2 className="size-4 text-muted-foreground animate-spin" />
           </div>
         ) : (
