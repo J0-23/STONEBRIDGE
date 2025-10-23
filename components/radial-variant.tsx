@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import React from "react";
 import {
   RadialBar,
   RadialBarChart,
@@ -9,15 +13,19 @@ import { formatCurrency } from "@/lib/utils";
 
 const COLORS = ["#0062FF", "#12C6FF", "#FF647F", "#FF9354"];
 
+interface DataItem {
+  name: string;
+  value: number;
+  fill?: string;
+}
+
 type Props = {
-  data: {
-    name: string;
-    value: number;
-  }[];
+  data: DataItem[];
 };
 
-export const RadialVariant = ({ data }: Props) => {
-  const total = data.reduce((sum, entry) => sum + entry.value, 0);
+export const RadialVariant: React.FC<Props> = ({ data }) => {
+  // total is calculated but not used
+  const _total = data.reduce((sum, entry) => sum + entry.value, 0);
 
   return (
     <ResponsiveContainer width="100%" height={350}>
@@ -36,7 +44,7 @@ export const RadialVariant = ({ data }: Props) => {
           label={{
             position: "insideStart",
             fill: "#fff",
-            fontSize: "12px",
+            fontSize: 12,
           }}
           background
           dataKey="value"
@@ -46,17 +54,16 @@ export const RadialVariant = ({ data }: Props) => {
           verticalAlign="bottom"
           align="right"
           iconType="circle"
-          content={({ payload }: any) => {
-            if (!payload) return null;
+          content={(props) => {
+            const payload = (props.payload as any[]) || [];
+            if (!payload.length) return null;
+
             return (
               <ul className="flex flex-col space-y-2">
-                {payload.map((entry: any, index: number) => (
-                  <li
-                    key={`item-${index}`}
-                    className="flex items-center space-x-2"
-                  >
+                {payload.map((entry, index) => (
+                  <li key={index} className="flex items-center space-x-2">
                     <span
-                      className="size-2 rounded-full"
+                      className="h-2 w-2 rounded-full"
                       style={{ backgroundColor: entry.color }}
                     />
                     <div className="space-x-1">
