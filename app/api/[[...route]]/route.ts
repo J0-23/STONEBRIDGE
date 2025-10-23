@@ -6,9 +6,8 @@ import categories from "./categories";
 import transactions from "./transactions";
 import summary from "./summary";
 
-const app = new Hono().basePath("/api");
-
-const routes = app
+const app = new Hono()
+  .basePath("/api")
   .route("/summary", summary)
   .route("/accounts", accounts)
   .route("/categories", categories)
@@ -19,4 +18,4 @@ export const POST = handle(app);
 export const PATCH = handle(app);
 export const DELETE = handle(app);
 
-export type AppType = typeof routes;
+export type AppType = typeof app;

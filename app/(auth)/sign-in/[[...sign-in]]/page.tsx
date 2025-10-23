@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import { SignIn, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Page() {
   const [logoGone, setLogoGone] = useState(false);

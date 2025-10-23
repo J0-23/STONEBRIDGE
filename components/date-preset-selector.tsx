@@ -30,9 +30,6 @@ export const DatePresetSelector = () => {
   const defaultFrom = sub(today, { days: 30 }).toISOString().slice(0, 10);
   const defaultTo = today.toISOString().slice(0, 10);
 
-  const fromParam = params.get("from") || defaultFrom;
-  const toParam = params.get("to") || defaultTo;
-
   // Ensure URL has default dates on first load
   useEffect(() => {
     const from = params.get("from");
@@ -48,7 +45,7 @@ export const DatePresetSelector = () => {
 
   const handlePresetClick = (preset: string) => {
     let from: string | undefined;
-    let to: string = today.toISOString().slice(0, 10);
+    const to: string = today.toISOString().slice(0, 10);
 
     switch (preset) {
       case "30d":

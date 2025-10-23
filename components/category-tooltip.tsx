@@ -1,12 +1,24 @@
-import { format } from "date-fns";
-
 import { formatCurrency } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
-export const CategoryTooltip = ({ active, payload }: any) => {
-  if (!active || !payload || !payload.length) return null;
+// Define a minimal, accurate type for Recharts tooltip props
+interface CategoryTooltipPayload {
+  payload: {
+    name: string;
+    value: number;
+  };
+  value: number;
+}
 
-  const name = payload[0].payload.name;
+interface CategoryTooltipProps {
+  active?: boolean;
+  payload?: CategoryTooltipPayload[];
+}
+
+export const CategoryTooltip = ({ active, payload }: CategoryTooltipProps) => {
+  if (!active || !payload || payload.length === 0) return null;
+
+  const { name } = payload[0].payload;
   const value = payload[0].value;
 
   return (
